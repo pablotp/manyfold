@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.config.upstream_repo = ENV.fetch("UPSTREAM_REPO", "https://github.com/manyfold3d/manyfold")
+# Where the source code of *this* (modified) version is published, as required by the AGPL
+Rails.application.config.source_repo = ENV.fetch("SOURCE_REPO", "https://github.com/pablotp/manyfold")
 Rails.application.config.app_version = ENV.fetch("APP_VERSION", "unknown").split(":")[-1]
 Rails.application.config.git_sha = ENV.fetch("GIT_SHA", "main")
 

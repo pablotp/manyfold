@@ -441,6 +441,7 @@ en:
       api: Explore our API
       by_html: Designed and built by <a href="https://floppy.org.uk" target="_blank" rel="noreferrer">James</a> with help from <a href="https://github.com/manyfold3d/manyfold/graphs/contributors" target="_blank" rel="noreferrer">our contributors</a>.
       community: Join the community
+      fork_notice_html: This is a modified version of Manyfold. <a href="%{url}" target="_blank" rel="noreferrer">Get the source code</a>.
       instance_heading: Instance Details
       issues: Report a problem
       open_source_html: <a href="https://github.com/manyfold3d/manyfold" target="_blank" rel="noreferrer">Open Source</a> under the <a href="https://github.com/manyfold3d/manyfold/blob/main/LICENSE.md" target="_blank" rel="noreferrer" rel="license">GNU Affero GPL 3.0</a>.

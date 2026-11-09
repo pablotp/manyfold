@@ -131,7 +131,9 @@ class Components::PreviewFrame < Components::Base
   end
 
   def empty
-    div class: "preview-empty" do
+    type = {"Collection" => :collection, "Creator" => :creator}.fetch(@object.class.name, :model)
+    div class: "preview-empty preview-empty-#{type}" do
+      Icon(icon: Components::TypeBadge.icon_for(type), role: "presentation")
       p { t("components.model_card.no_preview") }
     end
   end

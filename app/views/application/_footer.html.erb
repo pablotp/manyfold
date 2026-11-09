@@ -8,16 +8,17 @@
       <ul class="list-unstyled small text-muted">
         <li class="mb-2"><%= t ".by_html" %></li>
         <li class="mb-2"><%= t ".open_source_html" %></li>
+        <li class="mb-2"><%= t ".fork_notice_html", url: Rails.application.config.source_repo %></li>
         <% if current_user&.is_administrator? %>
           <li class="mb-2"><%= t ".version" %>:
             <%= link_to "#{Rails.application.config.app_version} (#{Rails.application.config.git_sha.first(8)})",
-                  "#{Rails.application.config.upstream_repo}/tree/#{Rails.application.config.git_sha}",
+                  "#{Rails.application.config.source_repo}/tree/#{Rails.application.config.git_sha}",
                   target: "_blank", rel: "noreferrer" %>
           </li>
         <% end %>
       </ul>
     </div>
-    <div class="col-4 col-lg-2 mb-3">
+    <div class="col-6 col-sm-4 col-lg-2 mb-3">
       <h5><%= site_name(default: t(".instance_heading")) %></h5>
       <ul class="list-unstyled">
         <li class="mb-2"><%= link_to t(".about"), about_path %></li>
@@ -27,10 +28,10 @@
         <li class="mb-2"><%= link_to t(".api"), api_url, rel: "noopener", target: "_blank" %></li>
       </ul>
     </div>
-    <div class="col-4 col-lg-2 mb-3">
+    <div class="col-6 col-sm-4 col-lg-2 mb-3">
       <h5><%= t "application.title" %></h5>
       <ul class="list-unstyled">
-        <li class="mb-2"><a href="https://github.com/manyfold3d/manyfold/issues/new/choose" target="_blank" rel="noreferrer"><%= t ".issues" %></a></li>
+        <li class="mb-2"><a href="<%= Rails.application.config.source_repo %>/issues" target="_blank" rel="noreferrer"><%= t ".issues" %></a></li>
         <li class="mb-2"><a href="https://manyfold.app/about/contact" target="_blank" rel="noreferrer"><%= t ".community" %></a></li>
         <li class="mb-2"><a href="https://manyfold.app/about/contribute" target="_blank" rel="noreferrer"><%= t ".sponsor" %></a></li>
       </ul>

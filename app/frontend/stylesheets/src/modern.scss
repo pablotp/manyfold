@@ -1,0 +1,498 @@
+// Modern UI layer for this fork.
+// Pure CSS on top of Bootstrap: no extra JavaScript or dependencies.
+// Uses Bootstrap CSS variables so it works with every theme and dark mode.
+
+:root {
+  --mf-radius: 0.85rem;
+  --mf-radius-sm: 0.5rem;
+  --mf-shadow: 0 1px 2px rgb(0 0 0 / 6%), 0 2px 8px rgb(0 0 0 / 6%);
+  --mf-shadow-hover: 0 4px 12px rgb(0 0 0 / 10%), 0 12px 28px rgb(0 0 0 / 10%);
+  // Per-type accents: models are blue, collections (folders) amber, creators teal
+  --mf-model-color: #3b6fe0;
+  --mf-model-bg: rgb(59 111 224 / 12%);
+  --mf-collection-color: #c77c00;
+  --mf-collection-bg: rgb(245 159 0 / 16%);
+  --mf-creator-color: #0f9b8e;
+  --mf-creator-bg: rgb(18 184 134 / 14%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mf-shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 2px 8px rgb(0 0 0 / 30%);
+    --mf-shadow-hover: 0 6px 16px rgb(0 0 0 / 50%), 0 12px 28px rgb(0 0 0 / 40%);
+    --mf-model-color: #7ea2ff;
+    --mf-model-bg: rgb(126 162 255 / 16%);
+    --mf-collection-color: #ffc046;
+    --mf-collection-bg: rgb(255 192 70 / 16%);
+    --mf-creator-color: #4fd8c4;
+    --mf-creator-bg: rgb(79 216 196 / 16%);
+  }
+}
+
+// Colours derived from the theme's own text/background, so they work with
+// light and dark Bootswatch themes alike.
+body {
+  --mf-surface-2: color-mix(in srgb, var(--bs-body-color) 4%, var(--bs-body-bg));
+  --mf-edge: color-mix(in srgb, var(--bs-body-color) 22%, var(--bs-body-bg));
+}
+
+// ---------------------------------------------------------------- Navbar
+
+#main-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  box-shadow: 0 2px 10px rgb(0 0 0 / 15%);
+
+  .nav-link {
+    border-radius: var(--mf-radius-sm);
+    transition: background-color .15s ease;
+
+    &:hover,
+    &:focus-visible {
+      background-color: rgb(255 255 255 / 12%);
+    }
+  }
+
+  #nav-search .form-control {
+    border-radius: 999px;
+    padding-inline: 1rem;
+  }
+
+  // Collapsed (mobile) menu: roomy touch targets and full-width search
+  @include media-breakpoint-down(md) {
+    .navbar-collapse {
+      max-height: calc(100vh - 4rem);
+      overflow-y: auto;
+      padding-bottom: .75rem;
+    }
+
+    // Stack the two halves of the menu instead of squeezing them side by side
+    .navbar-collapse.row {
+      margin-inline: 0;
+    }
+
+    .navbar-collapse.row > .navbar-nav {
+      flex: 0 0 100%;
+      width: 100%;
+      padding-inline: .5rem !important;
+    }
+
+    .navbar-collapse.row > .navbar-nav + .navbar-nav {
+      border-top: 1px solid rgb(255 255 255 / 20%);
+      margin-top: .25rem;
+      padding-top: .5rem;
+    }
+
+    .nav-link {
+      padding: .6rem .75rem;
+    }
+
+    #nav-search {
+      margin: .5rem 0 0 !important;
+      width: 100%;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- Breadcrumbs
+
+nav[aria-label="breadcrumb"] {
+  font-size: .9rem;
+  padding-block: .5rem !important;
+
+  .breadcrumb {
+    flex-wrap: wrap;
+  }
+}
+
+// ---------------------------------------------------------------- Cards
+
+.card {
+  border-radius: var(--mf-radius);
+  border-color: var(--bs-border-color-translucent);
+}
+
+.card > .card-header:first-child {
+  border-top-left-radius: var(--mf-radius);
+  border-top-right-radius: var(--mf-radius);
+}
+
+#sidebar .card {
+  box-shadow: var(--mf-shadow);
+  overflow: hidden;
+}
+
+.mf-card-grid > .col {
+  margin-bottom: 0 !important;
+}
+
+// Extra vertical room for the folder tabs on collection cards
+.mf-card-grid:has(.mf-collection-card) {
+  --bs-gutter-y: 1.75rem;
+}
+
+.mf-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--mf-shadow);
+  background: var(--bs-body-bg);
+  transition: box-shadow .2s ease, transform .2s ease;
+
+  &:hover,
+  &:focus-within {
+    box-shadow: var(--mf-shadow-hover);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .card-img-top {
+    border-radius: 0;
+  }
+
+  .card-title {
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .card-footer {
+    background: transparent;
+    border-top-color: var(--bs-border-color-translucent);
+
+    // Keep the menu button on the same line; let the left side wrap instead
+    > .row {
+      flex-wrap: nowrap;
+    }
+
+    > .row > .col {
+      min-width: 0;
+    }
+
+    .btn {
+      white-space: nowrap;
+    }
+  }
+
+  // Credits (creator / collection) shown under the title, not squeezed beside it
+  .mf-card-credits {
+    flex: 0 0 100%;
+    max-width: 100%;
+    margin-top: .25rem;
+
+    ul {
+      margin-bottom: 0;
+      display: flex;
+      flex-wrap: wrap;
+      column-gap: .75rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--bs-secondary-color);
+
+      &:hover {
+        color: var(--bs-link-hover-color);
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// Coloured accent line along the top of each card shows its type
+.mf-model-card {
+  border-top: 3px solid var(--mf-model-color);
+}
+
+.mf-creator-card {
+  border-top: 3px solid var(--mf-creator-color);
+}
+
+// Collections look like folders: amber accent, folder tab and stacked sheets
+// behind them to show that they contain other items.
+.mf-collection-card {
+  overflow: visible;
+  border-top: 3px solid var(--mf-collection-color);
+  border-top-left-radius: 0;
+  margin-top: .75rem;
+  box-shadow:
+    5px -5px 0 -1px var(--bs-body-bg),
+    5px -5px 0 0 var(--mf-edge),
+    var(--mf-shadow);
+
+  &:hover,
+  &:focus-within {
+    box-shadow:
+      5px -5px 0 -1px var(--bs-body-bg),
+      5px -5px 0 0 var(--mf-edge),
+      var(--mf-shadow-hover);
+  }
+
+  // Folder tab
+  &::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: calc(-.75rem - 3px);
+    width: 38%;
+    max-width: 9rem;
+    height: .75rem;
+    background: var(--mf-collection-color);
+    border-radius: var(--mf-radius-sm) var(--mf-radius-sm) 0 0;
+    clip-path: polygon(0 0, 85% 0, 100% 100%, 0 100%);
+  }
+
+  // Keep the preview inside the rounded card despite overflow: visible
+  > .card-img-top,
+  > .card-img-top-background,
+  > .preview-empty,
+  > .image-preview {
+    border-top-right-radius: calc(var(--mf-radius) - 3px);
+  }
+
+  > .card-footer:last-child {
+    border-bottom-left-radius: var(--mf-radius);
+    border-bottom-right-radius: var(--mf-radius);
+  }
+}
+
+.mf-unassigned-card {
+  border-style: dashed;
+  border-top-style: solid;
+}
+
+// Type badge shown on top of previews
+.mf-type-badge {
+  position: absolute;
+  top: .5rem;
+  left: .5rem;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .2rem .55rem;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--bs-body-bg) 82%, transparent);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 15%);
+
+  &.mf-type-model {
+    color: var(--mf-model-color);
+  }
+
+  &.mf-type-collection {
+    color: var(--mf-collection-color);
+  }
+
+  &.mf-type-creator {
+    color: var(--mf-creator-color);
+  }
+}
+
+// Remote (federated) items have a header bar at the top; move the badge below it
+.card-header.position-absolute ~ .mf-type-badge {
+  top: 2.75rem;
+}
+
+.mf-collection-icon {
+  color: var(--mf-collection-color);
+}
+
+.mf-creator-icon {
+  color: var(--mf-creator-color);
+}
+
+// ---------------------------------------------------------------- Empty previews
+
+.preview-card .preview-empty {
+  flex-direction: column;
+  gap: .5rem;
+  color: var(--bs-secondary-color);
+
+  &::before,
+  &::after {
+    display: none;
+  }
+
+  > .bi {
+    font-size: clamp(2.5rem, 9vw, 4.5rem);
+    line-height: 1;
+    opacity: .85;
+  }
+
+  p {
+    position: static;
+    margin: 0;
+  }
+
+  &.preview-empty-model {
+    background: var(--mf-model-bg);
+
+    > .bi {
+      color: var(--mf-model-color);
+    }
+  }
+
+  &.preview-empty-collection {
+    background: var(--mf-collection-bg);
+
+    > .bi {
+      color: var(--mf-collection-color);
+    }
+  }
+
+  &.preview-empty-creator {
+    background: var(--mf-creator-bg);
+
+    > .bi {
+      color: var(--mf-creator-color);
+    }
+  }
+}
+
+// ---------------------------------------------------------------- Sub-collections (folders) strip
+
+.mf-folder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: .75rem;
+}
+
+.mf-folder-tile {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .7rem .9rem;
+  border: 1px solid var(--bs-border-color-translucent);
+  border-left: 4px solid var(--mf-collection-color);
+  border-radius: var(--mf-radius-sm);
+  background: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  text-decoration: none;
+  box-shadow: var(--mf-shadow);
+  transition: box-shadow .15s ease, background-color .15s ease;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--mf-collection-bg);
+    box-shadow: var(--mf-shadow-hover);
+    color: var(--bs-body-color);
+  }
+
+  .mf-folder-tile-icon {
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--mf-collection-color);
+  }
+
+  .mf-folder-tile-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .mf-folder-tile-name {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// ---------------------------------------------------------------- Buttons & misc
+
+.btn {
+  border-radius: var(--mf-radius-sm);
+}
+
+.btn-sm {
+  border-radius: calc(var(--mf-radius-sm) * .8);
+}
+
+.pagination {
+  --bs-pagination-border-radius: var(--mf-radius-sm);
+  flex-wrap: wrap;
+  margin-bottom: .75rem;
+}
+
+#alerts .alert {
+  border-radius: var(--mf-radius-sm);
+  margin-top: .75rem;
+}
+
+#footer {
+  background: var(--mf-surface-2);
+}
+
+// ---------------------------------------------------------------- Phones
+
+@include media-breakpoint-down(sm) {
+  main#content {
+    padding-inline: .6rem;
+  }
+
+  // Two compact cards per row
+  .mf-card {
+    min-height: 0;
+
+    .card-body {
+      padding: .6rem .7rem;
+      font-size: .9rem;
+    }
+
+    .card-footer {
+      padding: .45rem .6rem;
+    }
+
+    .card-subtitle {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: .8rem;
+    }
+
+    .mf-card-credits {
+      font-size: .78rem;
+
+      ul {
+        flex-direction: column;
+      }
+    }
+  }
+
+  .mf-type-badge {
+    top: .35rem;
+    left: .35rem;
+    font-size: .62rem;
+    padding: .15rem .45rem;
+  }
+
+  .mf-folder-grid {
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    gap: .5rem;
+  }
+
+  // Sidebar (actions, filters, tags) comes after the list on phones
+  #sidebar {
+    margin-top: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mf-card,
+  .mf-folder-tile,
+  #main-navbar .nav-link {
+    transition: none;
+  }
+}

@@ -21,8 +21,9 @@ class Components::ModelCard < Components::Base
   def view_template
     div class: "col mb-3" do
       turbo_stream_from @model
-      div class: "card preview-card" do
+      div class: "card preview-card mf-card mf-model-card" do
         div(class: "card-header position-absolute w-100 top-0 z-3 bg-body-secondary text-secondary-emphasis opacity-75") { server_indicator @model } if @model.remote?
+        TypeBadge(type: :model)
         PreviewFrame(object: @model)
         div(class: "card-body") { info_row }
         actions
@@ -80,7 +81,7 @@ class Components::ModelCard < Components::Base
   end
 
   def collection(target:, name:, count:)
-    Icon icon: "collection", label: Collection.model_name.human
+    Icon icon: "folder2", label: Collection.model_name.human
     whitespace
     link_to name, target, "aria-label": [Collection.model_name.human, name].join(": ")
     if count > 1
@@ -99,11 +100,11 @@ class Components::ModelCard < Components::Base
 
   def info_row
     div class: "row" do
-      div class: "col" do
+      div class: "col mf-card-text" do
         title
         caption
       end
-      div class: "col-auto" do
+      div class: "col-auto mf-card-credits" do
         small do
           credits
         end
@@ -113,8 +114,8 @@ class Components::ModelCard < Components::Base
 
   def actions
     div class: "card-footer" do
-      div class: "row" do
-        div class: "col" do
+      div class: "row align-items-center" do
+        div class: "col d-flex flex-wrap align-items-center gap-1" do
           open_button
           whitespace
           LikeButton(thing: @model, small: true)
