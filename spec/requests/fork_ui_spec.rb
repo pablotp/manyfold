@@ -64,4 +64,52 @@ RSpec.describe "Fork UI", :after_first_run do
       expect(response.body).to include(Rails.application.config.source_repo)
     end
   end
+
+  describe "model cards", :as_member do
+    it "makes the whole card open the model" do
+      get "/models"
+      expect(response.body).to include("btn btn-primary btn-sm stretched-link")
+    end
+  end
+
+  describe "list view settings" do
+    context "when signed in", :as_member do
+      it "uses large tiles by default" do
+        get "/models"
+        expect(response.body).to include("mf-card-grid-large")
+      end
+
+      it "stores the chosen tile size and page size" do
+        get "/models", params: {tile_size: "small", per_page: "48"}
+        expect(controller.current_user.reload.pagination_settings).to include("tile_size" => "small", "per_page" => 48)
+      end
+
+      it "uses the stored tile size on later visits" do
+        get "/models", params: {tile_size: "small"}
+        get "/models"
+        expect(response.body).to include("mf-card-grid-small")
+      end
+
+      it "ignores invalid values" do
+        get "/models", params: {tile_size: "huge", per_page: "5000"}
+        expect(controller.current_user.reload.pagination_settings).to include("tile_size" => "large", "per_page" => 12)
+      end
+
+      it "applies the chosen page size" do
+        create_list(:model, 2, library: library)
+        get "/models", params: {per_page: "1"}
+        expect(response.body.scan("mf-model-card").length).to eq 1
+      end
+    end
+
+    context "when signed out", :multiuser do
+      before { create(:collection, :public) }
+
+      it "remembers the chosen tile size in the session" do
+        get "/collections", params: {tile_size: "medium"}
+        get "/collections"
+        expect(response.body).to include("mf-card-grid-medium")
+      end
+    end
+  end
 end

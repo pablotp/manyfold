@@ -206,6 +206,83 @@ nav[aria-label="breadcrumb"] {
 // Coloured accent line along the top of each card shows its type
 .mf-model-card {
   border-top: 3px solid var(--mf-model-color);
+
+  // The whole card opens the model: the open button is a stretched link
+  // covering the card, and the other controls sit above it.
+  .stretched-link::after {
+    z-index: 60;
+  }
+
+  .card-footer .btn:not(.stretched-link),
+  .card-footer .dropdown-menu,
+  .card-footer form,
+  .card-footer [data-bs-toggle],
+  .card-footer .badge,
+  .card-header,
+  .mf-card-credits a,
+  .editable {
+    position: relative;
+    z-index: 61;
+  }
+
+  &:has(.stretched-link:focus-visible) {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Smaller tiles (chosen in the View menu) fit more cards on a page
+.mf-card-grid-medium,
+.mf-card-grid-small {
+  .mf-card .card-body {
+    padding: .6rem .75rem;
+    font-size: .9rem;
+  }
+
+  .mf-card .card-footer {
+    padding: .4rem .6rem;
+  }
+
+  .mf-card .card-subtitle {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: .8rem;
+  }
+}
+
+.mf-card-grid-small {
+  --bs-gutter-x: .75rem;
+  --bs-gutter-y: .75rem;
+
+  .mf-card .card-body {
+    padding: .45rem .55rem;
+    font-size: .8rem;
+  }
+
+  .mf-card .card-subtitle {
+    display: none;
+  }
+
+  .mf-card .mf-card-credits {
+    font-size: .75rem;
+  }
+
+  .mf-card .card-footer {
+    padding: .3rem .45rem;
+
+    .btn {
+      --bs-btn-padding-y: .1rem;
+      --bs-btn-padding-x: .35rem;
+      --bs-btn-font-size: .75rem;
+    }
+  }
+
+  .mf-type-badge {
+    font-size: .65rem;
+    padding: .1rem .4rem;
+  }
 }
 
 .mf-creator-card {
@@ -432,6 +509,24 @@ nav[aria-label="breadcrumb"] {
 
 #footer {
   background: var(--mf-surface-2);
+  font-size: .8rem;
+  line-height: 1.4;
+}
+
+// Compact inline lists separated by dots, so the footer fits on one or two lines
+.mf-footer-list {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: .5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  > li:not(:last-child)::after {
+    content: '·';
+    margin-inline-start: .5rem;
+    color: var(--bs-secondary-color);
+  }
 }
 
 // ---------------------------------------------------------------- Phones

@@ -251,7 +251,23 @@ module ApplicationHelper
   alias_method :t, :translate_with_locale_wrapper
 
   def pagination_settings
-    current_user&.pagination_settings || SiteSettings::UserDefaults::PAGINATION
+    stored = current_user ? current_user.pagination_settings : session["pagination_settings"]
+    SiteSettings::UserDefaults::PAGINATION.merge(stored || {})
+  end
+
+  def tile_size
+    size = pagination_settings["tile_size"]
+    SiteSettings::UserDefaults::TILE_SIZES.include?(size) ? size : SiteSettings::UserDefaults::PAGINATION["tile_size"]
+  end
+
+  # Bootstrap grid classes for card lists, depending on the chosen tile size
+  def card_grid_classes(large: "row-cols-2 row-cols-lg-3 row-cols-xxl-4")
+    columns = {
+      "large" => large,
+      "medium" => "row-cols-2 row-cols-md-3 row-cols-xl-4 row-cols-xxl-5",
+      "small" => "row-cols-3 row-cols-md-4 row-cols-xl-5 row-cols-xxl-6"
+    }.fetch(tile_size)
+    "row #{columns} g-3 mb-4 mf-card-grid mf-card-grid-#{tile_size}"
   end
 
   def tag_cloud_settings

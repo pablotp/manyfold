@@ -104,7 +104,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         :landing_page, # i18n-tasks-use t("activerecord.attributes.user.landing_page")
         :sort_order, # i18n-tasks-use t("activerecord.attributes.user.sort_order")
         pagination_settings: [
-          :per_page
+          :per_page,
+          :tile_size
         ],
         tag_cloud_settings: [
           :threshold,
@@ -159,8 +160,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def pagination_json(settings)
     return nil unless settings
+    tile_size = settings[:tile_size].to_s
     {
-      "per_page" => settings[:per_page].to_i
+      "per_page" => settings[:per_page].to_i,
+      "tile_size" => SiteSettings::UserDefaults::TILE_SIZES.include?(tile_size) ? tile_size : SiteSettings::UserDefaults::PAGINATION["tile_size"]
     }
   end
 

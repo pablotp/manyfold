@@ -13,6 +13,14 @@
       <div>
         <%= pagination_settings_form.number_field :per_page, value: pagination_settings["per_page"], in: 1..100, class: "form-control" %>
       </div>
+      <div>
+        <%= pagination_settings_form.label :tile_size, t("components.view_menu.tile_size"), class: "col-form-label" %>
+      </div>
+      <div>
+        <%= pagination_settings_form.select :tile_size,
+              SiteSettings::UserDefaults::TILE_SIZES.map { |size| [t("components.view_menu.tile_sizes.%{size}" % {size: size}), size] },
+              {selected: tile_size}, class: "form-select" %>
+      </div>
     </div>
   </div>
 <% end %>

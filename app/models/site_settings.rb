@@ -163,8 +163,14 @@ class SiteSettings < RailsSettings::Base
     )
 
     PAGINATION = ActiveSupport::HashWithIndifferentAccess.new(
-      per_page: 12
+      per_page: 12,
+      tile_size: "large"
     )
+
+    # Tile sizes for card grids on list pages; smaller tiles fit more per row
+    TILE_SIZES = %w[large medium small].freeze
+    PER_PAGE_RANGE = (1..100)
+    PER_PAGE_OPTIONS = [12, 24, 48, 96].freeze
 
     TAG_CLOUD = ActiveSupport::HashWithIndifferentAccess.new(
       threshold: 2,
