@@ -14,7 +14,8 @@
 > - 2026-11-09: Docker images are built by GitHub Actions and published to GHCR and (optionally) Docker Hub.
 >
 > **Using this fork's images**: replace `manyfold3d/manyfold` with `ghcr.io/pablotp/manyfold`
-> (or `<your Docker Hub user>/manyfold`) in your `docker-compose.yml`; `-solo` variants are also built.
+> (or `<your Docker Hub user>/manyfold`) in your `docker-compose.yml`. Only the standard image (external
+> Postgres/MySQL + Redis) is built, for `linux/amd64`; the `-solo` variant is not.
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![Contributors](https://img.shields.io/github/all-contributors/manyfold3d/manyfold?color=ee8449&style=flat-square)](CONTRIBUTORS.md)

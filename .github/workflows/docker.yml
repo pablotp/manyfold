@@ -47,9 +47,10 @@ jobs:
       fail-fast: true
       max-parallel: 1
       matrix:
+        # Only the standard image (external Postgres/MySQL + Redis) is built for this fork.
+        # Add "- manyfold-solo" (built-in Redis + SQLite) back here if you need it.
         variant:
           - manyfold
-          - manyfold-solo
     runs-on: ubuntu-latest
     # An amd64 image normally builds in ~6-10 minutes; stop runaway builds
     # (e.g. hung emulated arm64 steps) instead of burning runner time.
@@ -138,21 +139,51 @@ jobs:
     permissions:
       packages: read # to pull the freshly built image from GHCR
     steps:
-      - name: Smoke test
-        run: curl http://localhost:3214/health --fail-with-body
-    services:
-      manyfold:
-        image: ghcr.io/${{ github.repository_owner }}/manyfold-solo:sha-${{ github.sha }}
-        credentials:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4.7.0
+        with:
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Same layout as a typical docker compose deployment: Postgres + Redis + Manyfold
+      - name: Start Postgres and Redis
+        run: |
+          docker network create manyfold
+          docker run -d --name postgres --network manyfold \
+            -e POSTGRES_USER=manyfold -e POSTGRES_PASSWORD=password -e POSTGRES_DB=manyfold \
+            postgres:17
+          docker run -d --name redis --network manyfold redis:7
+          for i in $(seq 1 30); do
+            docker exec postgres pg_isready -U manyfold -d manyfold && docker exec redis redis-cli ping && exit 0
+            sleep 2
+          done
+          echo "Postgres/Redis did not become ready"; exit 1
+
+      - name: Start Manyfold
         env:
-          SECRET_KEY_BASE: abc123
-        options: >-
-          --health-cmd "cat tmp/pids/server.pid"
-          --health-start-period	1m
-          --health-interval 30s
-          --health-timeout 10s
-          --health-retries 6
-        ports:
-          - 3214:3214
+          OWNER: ${{ github.repository_owner }}
+          SHA: ${{ github.sha }}
+        run: |
+          owner=$(echo "$OWNER" | tr '[:upper:]' '[:lower:]')
+          docker run -d --name manyfold --network manyfold -p 3214:3214 \
+            -e SECRET_KEY_BASE=abc123 \
+            -e REDIS_URL=redis://redis:6379/1 \
+            -e DATABASE_ADAPTER=postgresql -e DATABASE_HOST=postgres -e DATABASE_PORT=5432 \
+            -e DATABASE_USER=manyfold -e DATABASE_PASSWORD=password -e DATABASE_NAME=manyfold \
+            "ghcr.io/${owner}/manyfold:sha-${SHA}"
+
+      - name: Smoke test
+        run: |
+          # Wait up to 5 minutes for migrations and app boot
+          for i in $(seq 1 60); do
+            if curl --silent --fail-with-body http://localhost:3214/health; then
+              echo; echo "Manyfold is healthy"; exit 0
+            fi
+            sleep 5
+          done
+          echo "Manyfold did not become healthy"; exit 1
+
+      - name: Show container logs on failure
+        if: failure()
+        run: docker logs manyfold 2>&1 | tail -200
