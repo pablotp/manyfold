@@ -7,6 +7,8 @@ name: Docker
 # One-time setup (repository Settings -> Secrets and variables -> Actions):
 #   Variables: DOCKERHUB_USERNAME  your Docker Hub username (also used as the image namespace)
 #              DOCKER_PLATFORMS    optional, e.g. "linux/amd64,linux/arm64" (default: linux/amd64)
+#                                  arm64 is built under emulation and is very slow (it hung on
+#                                  "yarn install" for over an hour); it will hit the job timeout.
 #   Secrets:   DOCKERHUB_TOKEN     a Docker Hub personal access token with Read & Write scope
 #
 # Tags produced: "latest" and "edge" for the default branch, "sha-<commit>" for every build,
@@ -49,6 +51,9 @@ jobs:
           - manyfold
           - manyfold-solo
     runs-on: ubuntu-latest
+    # An amd64 image normally builds in ~6-10 minutes; stop runaway builds
+    # (e.g. hung emulated arm64 steps) instead of burning runner time.
+    timeout-minutes: 30
     permissions:
       contents: read # for checkout
       packages: write # to upload build to GHCR
@@ -129,6 +134,7 @@ jobs:
     if: github.triggering_actor != 'allcontributors[bot]' && github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.push)
     needs: build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       packages: read # to pull the freshly built image from GHCR
     steps:
