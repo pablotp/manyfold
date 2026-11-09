@@ -45,15 +45,17 @@ class Components::ModelCard < Components::Base
     end
   end
 
+  # The open button is a stretched link, so clicking anywhere on the card
+  # opens the model; other controls on the card are raised above it in CSS.
   def open_button
     if @actor && !@actor.local
-      link_to @actor.profile_url, {class: "btn btn-primary btn-sm", "aria-label": translate("components.model_card.open_button.label", name: @actor.name)} do
+      link_to @actor.profile_url, {class: "btn btn-primary btn-sm stretched-link", "aria-label": translate("components.model_card.open_button.label", name: @actor.name)} do
         span { "⁂" }
         whitespace
         span { t("components.model_card.open_button.text") }
       end
     else
-      link_to t("components.model_card.open_button.text"), @model, {class: "btn btn-primary btn-sm", "aria-label": translate("components.model_card.open_button.label", name: @model.name)}
+      link_to t("components.model_card.open_button.text"), @model, {class: "btn btn-primary btn-sm stretched-link", "aria-label": translate("components.model_card.open_button.label", name: @model.name)}
     end
   end
 

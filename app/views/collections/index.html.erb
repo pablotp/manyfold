@@ -11,10 +11,11 @@
         <%= pagination %>
       </div>
       <div class="col col-auto">
+        <%= ViewMenu(filter: @filter) %>
         <%= SortMenu(filter: @filter) %>
       </div>
     </div>
-    <div class="row row-cols-2 row-cols-lg-3 row-cols-xxl-4 g-3 mb-4 mf-card-grid">
+    <div class="<%= card_grid_classes %>">
       <%= render "unassigned" if @unassigned_count > 0 && (@pagy.page == 1) && !(@filter.filtering_by?(:collection) || @filter.filtering_by?(:creator)) %>
       <%= render @collections %>
     </div>

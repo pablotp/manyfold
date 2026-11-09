@@ -11,6 +11,8 @@
 > - 2026-11-09: UI refresh: clearer visual distinction between models and collections (folder styling,
 >   type badges, folder icons), sub-collections shown as folders on collection pages, folder-path
 >   breadcrumbs, two-column card grid and tidier navigation on phones, theme-aware modern card styling.
+> - 2026-11-09: Compact one-line footer; adjustable tile size and items per page on list pages
+>   (remembered between visits); clicking anywhere on a model card opens the model.
 > - 2026-11-09: Docker images are built by GitHub Actions and published to GHCR and (optionally) Docker Hub.
 >
 > **Using this fork's images**: replace `manyfold3d/manyfold` with `ghcr.io/pablotp/manyfold`

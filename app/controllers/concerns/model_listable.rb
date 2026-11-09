@@ -5,6 +5,7 @@ module ModelListable
     include TagListable
     include Filterable
     include Sortable
+    include ListDisplaySettings
   end
 
   private

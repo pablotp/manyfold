@@ -1,40 +1,30 @@
-<footer class="container-fluid mt-5 py-2 border-top" id="footer">
-  <div class="row">
-    <div class="col-lg-3 me-auto">
-      <span class="d-inline-flex align-items-center mb-2">
-        <a href="https://manyfold.app"><%= vite_image_tag "images/roundel.svg", width: 48, height: 48, class: "me-2", alt: translate("application.title") %></a>
-        <a href="https://manyfold.app"><%= vite_image_tag "images/logotype.svg", height: 32, class: "me-2", alt: translate("application.title") %></a>
-      </span>
-      <ul class="list-unstyled small text-muted">
-        <li class="mb-2"><%= t ".by_html" %></li>
-        <li class="mb-2"><%= t ".open_source_html" %></li>
-        <li class="mb-2"><%= t ".fork_notice_html", url: Rails.application.config.source_repo %></li>
-        <% if current_user&.is_administrator? %>
-          <li class="mb-2"><%= t ".version" %>:
-            <%= link_to "#{Rails.application.config.app_version} (#{Rails.application.config.git_sha.first(8)})",
-                  "#{Rails.application.config.source_repo}/tree/#{Rails.application.config.git_sha}",
-                  target: "_blank", rel: "noreferrer" %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-    <div class="col-6 col-sm-4 col-lg-2 mb-3">
-      <h5><%= site_name(default: t(".instance_heading")) %></h5>
-      <ul class="list-unstyled">
-        <li class="mb-2"><%= link_to t(".about"), about_path %></li>
-        <% if SiteSettings.support_link.presence %>
-          <li class="mb-2"><a href="<%= SiteSettings.support_link %>" target="_blank" rel="noreferrer"><%= t ".support" %></a></li>
-        <% end %>
-        <li class="mb-2"><%= link_to t(".api"), api_url, rel: "noopener", target: "_blank" %></li>
-      </ul>
-    </div>
-    <div class="col-6 col-sm-4 col-lg-2 mb-3">
-      <h5><%= t "application.title" %></h5>
-      <ul class="list-unstyled">
-        <li class="mb-2"><a href="<%= Rails.application.config.source_repo %>/issues" target="_blank" rel="noreferrer"><%= t ".issues" %></a></li>
-        <li class="mb-2"><a href="https://manyfold.app/about/contact" target="_blank" rel="noreferrer"><%= t ".community" %></a></li>
-        <li class="mb-2"><a href="https://manyfold.app/about/contribute" target="_blank" rel="noreferrer"><%= t ".sponsor" %></a></li>
-      </ul>
-    </div>
+<footer class="container-fluid mt-4 py-2 border-top small" id="footer">
+  <div class="d-flex flex-wrap align-items-center column-gap-3 row-gap-1">
+    <a href="https://manyfold.app" class="d-inline-flex align-items-center flex-shrink-0">
+      <%= vite_image_tag "images/roundel.svg", width: 22, height: 22, class: "me-1", alt: "" %>
+      <%= vite_image_tag "images/logotype.svg", height: 14, alt: translate("application.title") %>
+    </a>
+    <ul class="mf-footer-list text-muted">
+      <li><%= t ".by_html" %></li>
+      <li><%= t ".open_source_html" %></li>
+      <li><%= t ".fork_notice_html", url: Rails.application.config.source_repo %></li>
+      <% if current_user&.is_administrator? %>
+        <li><%= t ".version" %>:
+          <%= link_to "#{Rails.application.config.app_version} (#{Rails.application.config.git_sha.first(8)})",
+                "#{Rails.application.config.source_repo}/tree/#{Rails.application.config.git_sha}",
+                target: "_blank", rel: "noreferrer" %>
+        </li>
+      <% end %>
+    </ul>
+    <ul class="mf-footer-list ms-lg-auto" aria-label="<%= site_name(default: t(".instance_heading")) %>">
+      <li><%= link_to t(".about"), about_path %></li>
+      <% if SiteSettings.support_link.presence %>
+        <li><a href="<%= SiteSettings.support_link %>" target="_blank" rel="noreferrer"><%= t ".support" %></a></li>
+      <% end %>
+      <li><%= link_to t(".api"), api_url, rel: "noopener", target: "_blank" %></li>
+      <li><a href="<%= Rails.application.config.source_repo %>/issues" target="_blank" rel="noreferrer"><%= t ".issues" %></a></li>
+      <li><a href="https://manyfold.app/about/contact" target="_blank" rel="noreferrer"><%= t ".community" %></a></li>
+      <li><a href="https://manyfold.app/about/contribute" target="_blank" rel="noreferrer"><%= t ".sponsor" %></a></li>
+    </ul>
   </div>
 </footer>

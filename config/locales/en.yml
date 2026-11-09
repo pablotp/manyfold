@@ -609,6 +609,14 @@ en:
       updated: Updated
     sources_card:
       title: Remixed from
+    view_menu:
+      label: View
+      per_page: Items per page
+      tile_size: Tile size
+      tile_sizes:
+        large: Large
+        medium: Medium
+        small: Small
   concerns:
     linkable:
       sync:
