@@ -24,7 +24,15 @@ RUN apk add --no-cache \
   vtk=9.5.2-r2 \
   opencascade=7.9.3-r2
 
-RUN apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing draco=1.5.7-r2 f3d=4.0.0-r0
+# f3d (server-side thumbnails) only exists in edge/testing and is rebuilt against edge libraries,
+# so exact version pins break as soon as edge moves on (draco moved to edge/community, f3d 4.0.1
+# needs ffmpeg 9). Install it unpinned and let apk pull matching dependencies from edge.
+RUN apk add --no-cache \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
+  --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main \
+  draco f3d \
+  && f3d --version
 
 # Scripts for cross-platform architecture detection
 COPY --from=tonistiigi/xx / /
