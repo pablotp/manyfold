@@ -1,6 +1,6 @@
 ## BUILD STAGE ##########################################
 
-FROM base AS build
+FROM base AS build-tools
 
 RUN apk add --no-cache \
   alpine-sdk \
@@ -17,15 +17,23 @@ RUN apk add --no-cache \
   mariadb-dev \
   libarchive
 
+# JavaScript and Ruby dependencies are installed in separate stages so that they
+# are cached independently (a package.json change does not reinstall every gem,
+# and vice versa) and so that BuildKit installs both in parallel.
+FROM build-tools AS node-deps
 COPY package.json .
 COPY yarn.lock .
 RUN npm install --global corepack
 RUN corepack enable yarn
 RUN yarn install
 
+FROM build-tools AS gem-deps
 COPY .ruby-version .
 COPY Gemfile* ./
 RUN bundle install
+
+FROM node-deps AS build
+COPY --from=gem-deps /usr/src/app/vendor/bundle vendor/bundle
 
 COPY . .
 RUN touch db/schema.rb

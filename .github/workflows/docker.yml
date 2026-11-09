@@ -124,8 +124,11 @@ jobs:
           push: ${{ env.PUSH == 'true' }}
           tags: ${{ steps.docker_meta.outputs.tags }}
           labels: ${{ steps.docker_meta.outputs.labels }}
+          # Layer cache stored in the GitHub Actions cache: unchanged layers (Alpine packages,
+          # gems, node modules) are reused, so normally only the app code and assets rebuild.
+          # Note: caches saved on main are readable from every branch, not the other way round.
           cache-from: type=gha,scope=${{ matrix.variant }}
-          cache-to: type=gha,mode=max,scope=${{ matrix.variant }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.variant }},ignore-error=true
           build-args: |
             APP_VERSION=${{ steps.docker_meta.outputs.version }}
             GIT_SHA=${{ github.sha }}

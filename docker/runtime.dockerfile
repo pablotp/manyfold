@@ -2,10 +2,6 @@
 
 FROM base as runtime
 
-COPY . .
-COPY --from=build /usr/src/app/vendor/bundle vendor/bundle
-COPY --from=build /usr/src/app/public/vite public/vite
-
 # Copy only the dynamic libraries we need from the build image
 # It would be better to statically link the gems during build, if we can
 COPY --from=build \
@@ -24,13 +20,6 @@ COPY --from=build \
 ENV LD_PRELOAD="libjemalloc.so.2"
 ENV MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true"
 ENV RUBY_YJIT_ENABLE="1"
-
-ARG APP_VERSION
-ARG GIT_SHA
-ARG DOCKER_TAG
-ENV APP_VERSION=$APP_VERSION
-ENV GIT_SHA=$GIT_SHA
-ENV DOCKER_TAG=$DOCKER_TAG
 
 # Runtime environment variables
 ENV PORT=3214
@@ -58,6 +47,20 @@ ENV XDG_CACHE_HOME=/usr/src/app/tmp/cache
 # Run the app itself as an s6 service
 COPY ./docker/s6-rc.d/manyfold/manyfold /etc/s6-overlay/s6-rc.d/manyfold
 COPY ./docker/s6-rc.d/manyfold/user/contents.d/manyfold /etc/s6-overlay/s6-rc.d/user/contents.d/manyfold
+
+# Application code and build output go last: everything above is cached across
+# builds and only these layers change when the code changes.
+COPY . .
+COPY --from=build /usr/src/app/vendor/bundle vendor/bundle
+COPY --from=build /usr/src/app/public/vite public/vite
+
+# Build metadata changes on every commit, so it is set after all cacheable layers
+ARG APP_VERSION
+ARG GIT_SHA
+ARG DOCKER_TAG
+ENV APP_VERSION=$APP_VERSION
+ENV GIT_SHA=$GIT_SHA
+ENV DOCKER_TAG=$DOCKER_TAG
 
 EXPOSE 3214
 ENTRYPOINT ["/init"]
