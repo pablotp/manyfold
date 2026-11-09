@@ -11,11 +11,9 @@ name: Docker
 #
 # Tags produced: "latest" and "edge" for the default branch, "sha-<commit>" for every build,
 # "<version>" for v* git tags, and a custom tag for manual runs.
-# Pull requests are built to check that the image still builds, but nothing is pushed.
+# Pull requests are not built, to save CI time (add a pull_request trigger to re-enable).
 
 on:
-  pull_request:
-    branches: [ "main" ]
   push:
     branches: [ "main" ]
     tags:
@@ -27,13 +25,17 @@ on:
         type: string
         default: manual
         required: true
+      push:
+        description: 'Push the images (untick to only test that the build works)'
+        type: boolean
+        default: true
 
 concurrency:
   group: docker-${{ github.ref }}
   cancel-in-progress: true
 
 env:
-  PUSH: ${{ github.event_name != 'pull_request' }}
+  PUSH: ${{ github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.push) }}
   PLATFORMS: ${{ vars.DOCKER_PLATFORMS || 'linux/amd64' }}
 
 jobs:
@@ -124,7 +126,7 @@ jobs:
             DOCKER_TAG=${{ steps.docker_meta.outputs.tags }}
 
   smoke-test:
-    if: github.triggering_actor != 'allcontributors[bot]' && github.event_name != 'pull_request'
+    if: github.triggering_actor != 'allcontributors[bot]' && github.event_name != 'pull_request' && (github.event_name != 'workflow_dispatch' || inputs.push)
     needs: build
     runs-on: ubuntu-latest
     permissions:

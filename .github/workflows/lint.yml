@@ -1,6 +1,7 @@
 name: Lint
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -8,7 +9,8 @@ on:
 
 jobs:
   lint:
-    if: github.triggering_actor != 'allcontributors[bot]'
+    # In forks, only run when started manually (Actions tab -> Run workflow) to save CI time
+    if: (github.repository == 'manyfold3d/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@v7
