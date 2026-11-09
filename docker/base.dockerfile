@@ -35,4 +35,5 @@ RUN apk add --no-cache \
   && f3d --version
 
 # Scripts for cross-platform architecture detection
-COPY --from=tonistiigi/xx / /
+# Pinned by digest: a new "latest" would invalidate the build cache for every later layer.
+COPY --from=tonistiigi/xx@sha256:40fe21f44bb8cddf1eb1226db190d0a984118f62ee02a91b77d99448d28264a6 / /
