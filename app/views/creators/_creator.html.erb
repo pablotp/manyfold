@@ -1,6 +1,6 @@
 <div class="col mb-4">
   <%= turbo_stream_from creator %>
-  <div class="card creator-card">
+  <div class="card creator-card mf-card mf-creator-card">
     <% if creator.remote? %>
       <div class='card-header'>
         <%= server_indicator creator %>
@@ -15,6 +15,7 @@
         <% end %>
         <div class="col">
           <div class="card-title">
+            <%= Icon(icon: "person", role: "presentation", effect: "mf-creator-icon") unless creator.avatar %>
             <%= creator.name %>
             <%= AccessIndicator object: creator %>
           </div>

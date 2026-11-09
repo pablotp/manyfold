@@ -1,0 +1,21 @@
+<% if collections.any? %>
+  <section class="mf-subcollections mb-3" aria-labelledby="subcollections-heading">
+    <h2 class="h6 text-body-secondary mb-2" id="subcollections-heading">
+      <%= Icon(icon: "folder2", role: "presentation") %>
+      <%= Collection.model_name.human(count: 100) %>
+      <span class="badge rounded-pill text-bg-secondary"><%= collections.size %></span>
+    </h2>
+    <div class="mf-folder-grid">
+      <% collections.each do |subcollection| %>
+        <% model_count = policy_scope(subcollection.models).count %>
+        <%= link_to collection_path(subcollection), class: "mf-folder-tile" do %>
+          <%= Icon(icon: "folder-fill", role: "presentation", effect: "mf-folder-tile-icon") %>
+          <span class="mf-folder-tile-text">
+            <span class="mf-folder-tile-name"><%= subcollection.name %></span>
+            <small class="text-body-secondary"><%= "#{model_count} #{Model.model_name.human count: model_count}" %></small>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+<% end %>

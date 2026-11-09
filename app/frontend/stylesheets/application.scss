@@ -31,6 +31,9 @@ $ra-font-path: "@infinizhen/rpg-awesome-continued/fonts" !default;
 
 @import '~/stylesheets/components/comment';
 
+// Fork UI refresh (must come last so it can refine the styles above)
+@import '~/stylesheets/src/modern';
+
 .ts-control {
 	padding: 1px;
 }

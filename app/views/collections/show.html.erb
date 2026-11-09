@@ -8,7 +8,7 @@
 <%= content_for :page_header do %>
   <%= PageTitle title: @collection.name, heading: false, breadcrumbs: {
         Collection.model_name.human(count: 100) => collections_path
-      } %>
+      }.merge(collection_ancestor_breadcrumbs(@collection)) %>
 <% end %>
 
 <%= content_for :items do %>
@@ -23,6 +23,7 @@
       <div class="col col-auto">
         <%= content_tag(:div, class: "text-center") do %>
           <h2>
+            <%= Icon(icon: "folder2-open", role: "presentation", effect: "mf-collection-icon") %>
             <%= @collection.name %>
           </h2>
           <p>
@@ -51,6 +52,7 @@
       </div>
     </div>
   </div>
+  <%= render "subcollections", collections: policy_scope(@collection.collections).order(:name) %>
 <% end %>
 
 <% content_for :actions do %>
@@ -58,4 +60,6 @@
   <%= ReportButton(object: @collection, path: new_collection_report_path(@collection)) %>
 <% end %>
 
+<%# A collection that only contains sub-collections is not "empty" %>
+<% @hide_empty_notice = policy_scope(@collection.collections).exists? %>
 <%= render "models/list" %>

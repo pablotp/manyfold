@@ -68,7 +68,7 @@
             <div><%= link_to @model.creator.name, @model.creator, itemprop: "author" %></div>
           <% end %>
           <% if @model.collections.any? %>
-            <div><%= Icon icon: "collection", label: Collection.model_name.human(count: 100) %></div>
+            <div><%= Icon icon: "folder2", label: Collection.model_name.human(count: 100) %></div>
             <div>
               <% @model.collections.each do %>
                 <%= link_to it.name, models_path({collection: it}.merge(@filter&.to_params)) %>

@@ -1,15 +1,16 @@
 <div class="col mb-4">
   <%= turbo_stream_from collection %>
-  <div class="card preview-card">
+  <div class="card preview-card mf-card mf-collection-card">
     <% if collection.remote? %>
       <div class='card-header position-absolute w-100 top-0 z-3 bg-body-secondary text-secondary-emphasis opacity-75'>
         <%= server_indicator collection %>
       </div>
     <% end %>
+    <%= TypeBadge(type: :collection) %>
     <%= PreviewFrame(object: collection) %>
     <div class="card-body">
       <div class="row">
-        <div class="col">
+        <div class="col mf-card-text">
           <div class="card-title">
             <%= collection.name.careful_titleize %>
             <%= AccessIndicator object: collection %>
@@ -19,7 +20,7 @@
           <% end %>
           <%= LinkList links: collection.links %>
         </div>
-        <div class="col col-auto">
+        <div class="col col-auto mf-card-credits">
           <small>
             <%= render "attribution", collection: collection %>
           </small>
@@ -27,10 +28,10 @@
       </div>
     </div>
     <div class='card-footer'>
-      <div class='row'>
+      <div class='row align-items-center'>
         <% model_count = policy_scope(collection.models).count %>
         <% collection_count = policy_scope(collection.collections).count %>
-        <div class='col'>
+        <div class='col d-flex flex-wrap gap-1'>
           <%= if policy(collection).show?
                 GoButton(
                   label: "#{model_count} #{Model.model_name.human count: model_count}",
@@ -38,7 +39,9 @@
                     translate(".models_button.remote_label", name: collection.name) :
                     translate(".models_button.label", name: collection.name),
                   href: collection_path(collection),
-                  variant: "primary"
+                  variant: "primary",
+                  icon: "box",
+                  small: true
                 )
               end %>
           <%= if policy(collection).show? && !collection.collections.empty?
@@ -48,7 +51,9 @@
                     translate(".collections_button.remote_label", name: collection.name) :
                     translate(".collections_button.label", name: collection.name),
                   href: collections_path(collection: collection),
-                  variant: "primary"
+                  variant: "outline-primary",
+                  icon: "folder2",
+                  small: true
                 )
               end %>
         </div>

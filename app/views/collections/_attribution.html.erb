@@ -9,7 +9,7 @@
     <%- collections = Array.new(collection.fedipub_actor.extensions["context"] || []) %>
     <% if (collections.any?) %>
       <li>
-        <%= Icon icon: "collection", label: Collection.model_name.human %>
+        <%= Icon icon: "folder2", label: Collection.model_name.human %>
         <%= link_to collections.first["name"], collections.first["url"] %>
         <%= content_tag(:span) { "+#{collections.count - 1}" } if collections.count > 1 %>
       </li>
@@ -23,8 +23,8 @@
     <% end %>
     <% if collection.collection %>
       <li>
-        <%= Icon icon: "collection", label: Collection.model_name.human %>
-        <%= link_to collection.collection.name, collection, @filter.to_params %><br>
+        <%= Icon icon: "folder2", label: Collection.model_name.human %>
+        <%= link_to collection.collection.name, collection_path(collection.collection, @filter.to_params) %><br>
       </li>
     <% end %>
   <% end %>

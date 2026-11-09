@@ -28,7 +28,7 @@ class Components::ActorCard < Components::ModelCard
     when "Creator"
       "person"
     when "Collection"
-      "collection"
+      "folder2"
     when "Model"
       "box"
     end

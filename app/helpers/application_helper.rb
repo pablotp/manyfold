@@ -41,7 +41,7 @@ module ApplicationHelper
     when "Creator"
       "person"
     when "Collection"
-      "collection"
+      "folder2"
     when "Library"
       "boxes"
     when "Model"

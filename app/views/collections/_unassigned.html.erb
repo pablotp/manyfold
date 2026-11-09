@@ -1,12 +1,12 @@
 <div class="col mb-4">
-  <div class="card preview-card border-warning">
-    <div class='preview-empty'> <p><%= t "collections.collection.no_preview" %></p></div>
+  <div class="card preview-card mf-card mf-collection-card mf-unassigned-card">
+    <div class='preview-empty preview-empty-collection'><%= Icon(icon: "folder-x", role: "presentation") %><p><%= t "collections.collection.no_preview" %></p></div>
     <div class="card-body">
       <div class="card-title"><%= t(".name") %></div>
       <span class="card-subtitle mb-2 text-muted"><%= t(".caption") %></span>
     </div>
     <div class='card-footer'>
-      <%= link_to "#{@unassigned_count} #{Model.model_name.human count: @unassigned_count}", models_path(collection: ""), {class: "btn btn-primary"} %>
+      <%= link_to "#{@unassigned_count} #{Model.model_name.human count: @unassigned_count}", models_path(collection: ""), {class: "btn btn-sm btn-primary"} %>
     </div>
   </div>
 </div>

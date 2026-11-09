@@ -1,5 +1,21 @@
 # Manyfold
 
+> [!IMPORTANT]
+> **This is a modified, unofficial fork** of [Manyfold](https://github.com/manyfold3d/manyfold), maintained at
+> [github.com/pablotp/manyfold](https://github.com/pablotp/manyfold). It is not supported by the Manyfold
+> developers: please report problems with this fork [here](https://github.com/pablotp/manyfold/issues), not upstream.
+> Changes from this fork are never contributed upstream (see [AGENTS.md](AGENTS.md)). Licensed under the
+> [GNU AGPL v3](LICENSE.md), like the original.
+>
+> **Changes in this fork**
+> - 2026-11-09: UI refresh: clearer visual distinction between models and collections (folder styling,
+>   type badges, folder icons), sub-collections shown as folders on collection pages, folder-path
+>   breadcrumbs, two-column card grid and tidier navigation on phones, theme-aware modern card styling.
+> - 2026-11-09: Docker images are built by GitHub Actions and published to GHCR and (optionally) Docker Hub.
+>
+> **Using this fork's images**: replace `manyfold3d/manyfold` with `ghcr.io/pablotp/manyfold`
+> (or `<your Docker Hub user>/manyfold`) in your `docker-compose.yml`; `-solo` variants are also built.
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![Contributors](https://img.shields.io/github/all-contributors/manyfold3d/manyfold?color=ee8449&style=flat-square)](CONTRIBUTORS.md)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
