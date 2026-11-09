@@ -10,8 +10,8 @@ on:
 jobs:
   test:
     name: SQLite3
-    # In forks, only run when started manually (Actions tab -> Run workflow) to save CI time
-    if: (github.repository == 'manyfold3d/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
+    # Runs automatically in upstream and in this fork (pablotp/manyfold); other forks can start it manually (Actions tab -> Run workflow)
+    if: (github.repository == 'manyfold3d/manyfold' || github.repository == 'pablotp/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
     strategy:
       fail-fast: false
     runs-on: ubuntu-26.04
@@ -39,8 +39,8 @@ jobs:
 
   test_postgres:
     name: PostgreSQL
-    # In forks, only run when started manually (Actions tab -> Run workflow) to save CI time
-    if: (github.repository == 'manyfold3d/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
+    # Runs automatically in upstream and in this fork (pablotp/manyfold); other forks can start it manually (Actions tab -> Run workflow)
+    if: (github.repository == 'manyfold3d/manyfold' || github.repository == 'pablotp/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
     strategy:
       fail-fast: false
     runs-on: ubuntu-26.04
@@ -77,8 +77,8 @@ jobs:
 
   test_mariadb:
     name: MariaDB
-    # In forks, only run when started manually (Actions tab -> Run workflow) to save CI time
-    if: (github.repository == 'manyfold3d/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
+    # Runs automatically in upstream and in this fork (pablotp/manyfold); other forks can start it manually (Actions tab -> Run workflow)
+    if: (github.repository == 'manyfold3d/manyfold' || github.repository == 'pablotp/manyfold' || github.event_name == 'workflow_dispatch') && github.triggering_actor != 'allcontributors[bot]'
     strategy:
       fail-fast: false
     runs-on: ubuntu-26.04
